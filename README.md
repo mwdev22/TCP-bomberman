@@ -8,7 +8,7 @@ A terminal-based multiplayer Bomberman-style game built with Go and raw TCP sock
 
 ## 🎮 Features
 
-- Multiplayer gameplay over raw TCP (no HTTP or WebSockets)
+- Multiplayer gameplay over raw TCP
 - Dynamic maps with destructible blocks
 - Player movement via arrow keys
 - Bomb planting with timed explosions
@@ -27,7 +27,7 @@ A terminal-based multiplayer Bomberman-style game built with Go and raw TCP sock
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/tcp-bomberman.git
+git clone https://github.com/mwdev22/TCP-bomberman.git
 cd tcp-bomberman
 ```
 
