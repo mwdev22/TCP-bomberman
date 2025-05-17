@@ -2,7 +2,7 @@
 
 A terminal-based multiplayer Bomberman-style game built with Go and raw TCP sockets. Connect, compete, and outwit opponents by strategically planting bombs and navigating a destructible arena — all from your terminal.
 
-![Gameplay Screenshot](./gameplay1.jpg)
+![Gameplay Screenshot](./gameplay1.png)
 
 ---
 
@@ -52,5 +52,5 @@ make run-server     # Runs the server
 make run-client     # Runs the client
 ```
 
-![Gameplay Screenshot](./gameplay2.jpg)
-![Gameplay Screenshot](./gameplay3.jpg)
+![Gameplay Screenshot](./gameplay2.png)
+![Gameplay Screenshot](./gameplay3.png)
