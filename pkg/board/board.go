@@ -136,10 +136,8 @@ func (b *Board) explode(bomb *Bomb) []string {
 			}
 		}
 
-		// Set explosion tile
 		b.Grid[y][x] = Explosion
 
-		// Track explosion for removal after 1s
 		b.Explosions = append(b.Explosions, ExplosionTile{
 			X:         x,
 			Y:         y,
@@ -196,7 +194,6 @@ func (b *Board) AddPlayer(id string) *Player {
 		return nil // full board
 	}
 
-	// Jeśli nie ma innych graczy, wybierz losowo
 	if len(b.Players) == 0 {
 		pos := emptyPositions[rand.Intn(len(emptyPositions))]
 		player := &Player{ID: id, X: pos[0], Y: pos[1]}

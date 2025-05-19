@@ -39,7 +39,7 @@ func (r *Room) tickLoop() {
 		case <-ticker.C:
 			r.RoomLock.Lock()
 			destroyedPlayers, changed := r.Board.Tick()
-
+			broadcasts := make([]func(), 0)
 			for _, id := range destroyedPlayers {
 				log.Printf("Destroying player %s\n", id)
 				client, ok := r.Clients[id]
@@ -47,13 +47,20 @@ func (r *Room) tickLoop() {
 					client.Conn.Write([]byte("You have been destroyed!\n"))
 					client.Disconnect()
 					delete(r.Clients, id)
+					broadcasts = append(broadcasts, func() {
+						r.Broadcast("Player " + id + " has been destroyed!\n")
+					})
 				}
+
 			}
 
 			r.RoomLock.Unlock()
 
 			if changed {
 				r.Broadcast(r.Board.String())
+			}
+			for _, broadcast := range broadcasts {
+				broadcast()
 			}
 		}
 	}

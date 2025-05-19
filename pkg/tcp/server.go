@@ -6,7 +6,6 @@ import (
 	"net"
 	"strings"
 	"sync"
-	"time"
 )
 
 type Server struct {
@@ -40,7 +39,7 @@ func (s *Server) buildInstructions() string {
 	builder.WriteString("  JOIN <room>     - Join or create a specific room\n")
 	builder.WriteString("  ROOMS           - List rooms and player counts\n")
 	builder.WriteString("  Use arrow keys  - Move around (← ↑ → ↓)\n")
-	builder.WriteString("  Press 'B'       - Plant a bomb\n")
+	builder.WriteString("  Press 'b'       - Plant a bomb\n")
 	builder.WriteString("----------------------------------------\n")
 	builder.WriteString("Current Rooms:\n")
 
@@ -75,9 +74,7 @@ func (s *Server) Listen() error {
 				log.Println("server is shutting down - stopping accept loop.")
 				return
 			default:
-				s.Listener.(*net.TCPListener).SetDeadline(time.Now().Add(1 * time.Second))
 				conn, err := s.Listener.Accept()
-				log.Println("new connection from", conn.RemoteAddr())
 				if err != nil {
 					if ne, ok := err.(net.Error); ok && ne.Timeout() {
 						continue
@@ -85,6 +82,8 @@ func (s *Server) Listen() error {
 					log.Println("accept error:", err)
 					continue
 				}
+				log.Println("new connection from", conn.RemoteAddr()) // <- teraz jest bezpiecznie
+
 				go s.handleConnection(conn)
 			}
 		}
@@ -109,8 +108,7 @@ func (s *Server) Stop() error {
 
 	for addr, client := range s.Clients {
 		log.Printf("closing connection to %s\n", addr)
-		client.Conn.Close()
-		close(client.Quit)
+		client.Disconnect()
 	}
 	s.Clients = make(map[string]*Client)
 
@@ -211,7 +209,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 			dx = 1
 		case "\x1b[D":
 			dx = -1
-		case "B":
+		case "b":
 			room.RoomLock.Lock()
 			room.Board.PlantBomb(client.ID)
 			room.RoomLock.Unlock()
@@ -226,7 +224,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 		moved := room.Board.MovePlayer(client.ID, dx, dy)
 		room.RoomLock.Unlock()
 
-		if moved || msg == "B" {
+		if moved || msg == "b" {
 			room.Broadcast(room.Board.String())
 		} else {
 			conn.Write([]byte("Can't move\n"))

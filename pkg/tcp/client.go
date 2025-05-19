@@ -20,5 +20,6 @@ func (c *Client) Disconnect() {
 		close(c.Quit)
 	}
 	log.Printf("Disconnecting client %s\n", c.ID)
+	c.Conn.Write([]byte("You have been disconnected.\n"))
 	_ = c.Conn.Close()
 }
