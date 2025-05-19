@@ -3,7 +3,7 @@ include ./.env
 export $(shell sed 's/=.*//' .env)
 
 # Project variables
-PROJECT_NAME := search_cdr
+PROJECT_NAME := TCP-BOMBERMAN
 PKG := ./...
 SERVER := ./cmd/server/
 CLIENT := ./cmd/client/
